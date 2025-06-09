@@ -56,8 +56,8 @@ const Register = () => {
                 Register
             </Button>
         </Flex>
-    );
-};
+    )
+}
 
 
 export { Register }
