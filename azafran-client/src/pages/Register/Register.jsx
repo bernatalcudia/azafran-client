@@ -1,8 +1,11 @@
 import { Button, Flex, Input, Typography } from 'antd'
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
 
 const Register = () => {
     const { Title } = Typography
+
+    const navigate = useNavigate()
 
     const [formData, setFormData] = useState({
         user: '',
@@ -17,7 +20,23 @@ const Register = () => {
         formData.password == formData.repeatPassword;
 
     const handleRegisterButtonClick = () => {
-        console.log(formData);
+        fetch('http://localhost:8000/users/register', {
+            headers: {
+                'Content-type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({ username: formData.user, password: formData.password })
+
+        })
+            .then((res) => {
+                if (res.ok) {
+                    console.log('user registered')
+                    navigate('/login')
+                } else {
+                    console.error('error found', res.body)
+                }
+            })
+            .catch((error) => console.error(error))
     };
 
     return (

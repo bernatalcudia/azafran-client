@@ -7,9 +7,26 @@ const { Title } = Typography
 const Login = () => {
     const [user, setUser] = useState('')
     const [password, setPassword] = useState('')
+    const [errormsg, setErrorMsg] = useState('')
 
     const handleButtonLogin = () => {
         console.log(user, password)
+        fetch('http://localhost:8000/users/login', {
+            headers: {
+                'Content-type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({ username: user, password: password })
+        })
+            .then(async (res) => {
+                const data = await res.json()
+                if (res.status >= 400 && data.msg) {
+                    setErrorMsg(data.msg)
+                } else {
+                    localStorage.setItem('accessToken', data.accessToken)
+                }
+            })
+            .catch((error) => { console.warn(error) })
     }
 
     return (
